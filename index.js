@@ -2132,6 +2132,24 @@ app.post('/availability-range', async (req, res) => {
 
 app.get('/healthz', (_, res) => res.status(200).send('ok'));
 
+// 1) Redirige el root al panel
+app.get('/', (req, res) => res.redirect('/panel'));
+
+// 2) Sirve el panel inline (si ya lo tenías, déjalo igual)
+app.get('/panel', (req, res) => {
+  res.type('html').send(PANEL_HTML);   // <-- tu PANEL_HTML grande tal cual
+});
+
+// 3) Logo simple (opcional) para evitar 404 en /assets/logo.svg
+app.get('/assets/logo.svg', (req, res) => {
+  res.type('image/svg+xml').send(`
+    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none">
+      <rect x="2" y="2" width="20" height="20" rx="6" stroke="#4da3ff" stroke-width="2"/>
+      <path d="M7 13l3 3 7-7" stroke="#2cd4c6" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  `);
+});
+
 
 // ====== ARRANQUE ======
 // reemplaza tu listen actual
@@ -2141,4 +2159,5 @@ app.listen(PORT, '0.0.0.0', () => {
 });
 
 connectWhatsApp().catch(err => { console.error('❌ Error conectando WhatsApp:', err); });
+
 
