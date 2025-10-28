@@ -17,6 +17,17 @@ if (process.env.GOOGLE_CREDENTIALS_JSON && !process.env.GOOGLE_APPLICATION_CREDE
   console.log('✅ SA escrita en', p);
 }
 
+import fs from 'fs';
+
+if (!process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+  console.error('❌ Falta GOOGLE_APPLICATION_CREDENTIALS');
+} else if (!fs.existsSync(process.env.GOOGLE_APPLICATION_CREDENTIALS)) {
+  console.error('❌ No existe el archivo de credenciales en', process.env.GOOGLE_APPLICATION_CREDENTIALS);
+} else {
+  console.log('✅ Credenciales encontradas en', process.env.GOOGLE_APPLICATION_CREDENTIALS);
+}
+
+
 // Baileys (WhatsApp QR)
 import * as Baileys from '@whiskeysockets/baileys';
 const {
@@ -2159,5 +2170,6 @@ app.listen(PORT, '0.0.0.0', () => {
 });
 
 connectWhatsApp().catch(err => { console.error('❌ Error conectando WhatsApp:', err); });
+
 
 
