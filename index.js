@@ -1287,11 +1287,15 @@ else {
   await sendWhatsAppText(remoteJid, '⏳ Un momento, estoy consultando…');
 
   try {
-    const r = await fetch(`${SELF_BASE}/chat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ from: remoteJid, message: userText }),
-    });
+    const INTERNAL_PORT = process.env.PORT || 3000;
+const INTERNAL_BASE = `http://127.0.0.1:${INTERNAL_PORT}`;
+
+const r = await fetch(`${INTERNAL_BASE}/chat`, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ from: remoteJid, message: userText }),
+});
+
     const text = await r.text();
     let data; try { data = JSON.parse(text); } catch { data = null; }
     if (!r.ok) { console.error('❌ /chat status:', r.status, text); await sendWhatsAppText(remoteJid, '⚠️ Hubo un problema consultando. Intenta otra vez.'); return; }
@@ -2177,6 +2181,7 @@ app.listen(PORT, HOST, () =>
 );
 
 connectWhatsApp().catch(err => { console.error('❌ Error conectando WhatsApp:', err); });
+
 
 
 
