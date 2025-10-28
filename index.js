@@ -1287,7 +1287,7 @@ else {
   await sendWhatsAppText(remoteJid, '⏳ Un momento, estoy consultando…');
 
   try {
-    const r = await fetch('http://localhost:3000/chat', {
+    const r = await fetch(`${SELF_BASE}/chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ from: remoteJid, message: userText }),
@@ -2163,12 +2163,21 @@ app.get('/assets/logo.svg', (req, res) => {
 
 // ====== ARRANQUE ======
 // reemplaza tu listen actual
+// --- config de servidor ---
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 Servidor en http://localhost:${PORT}`);
-});
+const HOST = process.env.HOST || '0.0.0.0';
+
+// Si estamos en Render, autoapuntar al puerto real en localhost
+const SELF_BASE =
+  process.env.SELF_BASE ||
+  (process.env.RENDER ? `http://127.0.0.1:${PORT}` : `http://localhost:${PORT}`);
+
+app.listen(PORT, HOST, () =>
+  console.log(`🚀 Servidor en http://${HOST}:${PORT}`)
+);
 
 connectWhatsApp().catch(err => { console.error('❌ Error conectando WhatsApp:', err); });
+
 
 
 
