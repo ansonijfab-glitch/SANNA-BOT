@@ -40,7 +40,6 @@ const {
 
 import pino from 'pino';
 import qrcode from 'qrcode-terminal';
-import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -2170,6 +2169,7 @@ app.listen(PORT, '0.0.0.0', () => {
 });
 
 connectWhatsApp().catch(err => { console.error('❌ Error conectando WhatsApp:', err); });
+
 
 
 
